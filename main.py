@@ -97,7 +97,7 @@ def main():
                 like_post(post)
             if random.random() < 0.6:
                 repost_post(driver, post)
-            if random.random() < 1:
+            if random.random() < 0.4:
                 comment_on_post(driver, post)
             if random.random() < 0.75:
                 follow_post(post)
