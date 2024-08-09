@@ -32,7 +32,7 @@ def like_post(post):
     try:
         like_button = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-red text-faint"]')
         if like_button:
-            random_pause()
+            fast_pause()
             like_button.click()
             fast_pause()
     except Exception as e:
@@ -42,6 +42,7 @@ def repost_post(driver, post):
     try:
         recast1 = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-green text-faint"]')
         if recast1:
+            fast_pause()
             recast1.click()
             random_pause()
             recast2 = driver.find_element(By.XPATH, '//button[@class="flex w-full flex-row items-center justify-start p-2 align-middle text-sm outline-none hover:cursor-pointer hover:bg-overlay-faint text-default "]')
@@ -54,8 +55,9 @@ def comment_on_post(driver, post):
     try:
         random_ans = ['LFG', 'DD', 'xD', 'lfg', 'LFG!', 'YAY', 'wow', 'Ate!', 'you ate...', 'ate', 'WOW']
         random_text = random.choice(random_ans)
-        comment1 = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-purple text-faint"]')
+        comment1 = post.find_element(By.XPATH,'.//div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-purple  text-faint"]')
         if comment1:
+            fast_pause()
             comment1.click()
             fast_pause()
             driver.switch_to.active_element.send_keys(random_text)
@@ -71,6 +73,7 @@ def follow_post(post):
     try:
         follow = post.find_element(By.XPATH, './/div[@class="absolute bottom-0 right-0 mb-[-4px] mr-[-4px] flex h-[20px] w-[20px] items-center justify-center rounded-full border-[2px] bg-[#E2D8F4] border-app hover:bg-[#c1a9df]"]')
         if follow:
+            fast_pause()
             follow.click()
     except Exception as ex:
         print(f"Ошибка при попытке подписаться: {ex}")
@@ -94,13 +97,13 @@ def main():
                 like_post(post)
             if random.random() < 0.6:
                 repost_post(driver, post)
-            if random.random() < 0.42:
+            if random.random() < 1:
                 comment_on_post(driver, post)
             if random.random() < 0.75:
                 follow_post(post)
             
-            mid_pause()
-        big_pause()
+            random_pause()
+        random_pause()
         main()
 
     except Exception as ex:
