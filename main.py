@@ -1,0 +1,113 @@
+import time
+import random
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from auth import useragent, profilepath, nameprofile
+
+
+def setup_browser():
+    options = Options()
+    options.add_argument(f"user-agent={useragent}")
+    options.add_argument("--start-maximized")
+    options.add_argument(profilepath)
+    options.add_argument(rf"profile-directory={nameprofile}")
+    driver = webdriver.Chrome(options=options)
+    return driver
+
+def fast_pause(min_time=1.03, max_time=2.29):
+    time.sleep(random.uniform(min_time, max_time))
+
+def random_pause(min_time=2.77, max_time=5.23):
+    time.sleep(random.uniform(min_time, max_time))
+
+def mid_pause(min_time=169, max_time=278):
+    time.sleep(random.uniform(min_time, max_time))
+
+def big_pause(min_time=3526, max_time=4286):
+    time.sleep(random.uniform(min_time, max_time))
+
+def like_post(post):
+    try:
+        like_button = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-red text-faint"]')
+        if like_button:
+            random_pause()
+            like_button.click()
+            fast_pause()
+    except Exception as e:
+        print(f"Ошибка при попытке поставить лайк: {e}")
+
+def repost_post(driver, post):
+    try:
+        recast1 = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-green text-faint"]')
+        if recast1:
+            recast1.click()
+            random_pause()
+            recast2 = driver.find_element(By.XPATH, '//button[@class="flex w-full flex-row items-center justify-start p-2 align-middle text-sm outline-none hover:cursor-pointer hover:bg-overlay-faint text-default "]')
+            recast2.click()
+            fast_pause()
+    except Exception as e:
+        print(f"Ошибка при попытке сделать репост: {e}")
+
+def comment_on_post(driver, post):
+    try:
+        random_ans = ['LFG', 'DD', 'xD', 'lfg', 'LFG!', 'YAY', 'wow', 'Ate!', 'you ate...', 'ate', 'WOW']
+        random_text = random.choice(random_ans)
+        comment1 = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-purple text-faint"]')
+        if comment1:
+            comment1.click()
+            fast_pause()
+            driver.switch_to.active_element.send_keys(random_text)
+            random_pause()
+            comment2 = driver.find_element(By.XPATH, './/button[@class="rounded-lg font-semibold border border-transparent bg-action-primary text-light active:border-action-primary-active disabled:bg-action-primary-disabled disabled:text-action-primary-disabled disabled:active:border-transparent px-[0.9333rem] py-[0.4333rem] text-sm" and @title="Reply"]')
+            ActionChains(driver).move_to_element(comment2).perform()
+            fast_pause()
+            comment2.click()
+    except Exception as e:
+        print(f"Ошибка при попытке оставить комментарий: {e}")
+
+def follow_post(post):
+    try:
+        follow = post.find_element(By.XPATH, './/div[@class="absolute bottom-0 right-0 mb-[-4px] mr-[-4px] flex h-[20px] w-[20px] items-center justify-center rounded-full border-[2px] bg-[#E2D8F4] border-app hover:bg-[#c1a9df]"]')
+        if follow:
+            follow.click()
+    except Exception as ex:
+        print(f"Ошибка при попытке подписаться: {ex}")
+
+driver = setup_browser()
+actions = ActionChains(driver)
+
+def main():
+    posts = []
+    try:
+        driver.get("https://warpcast.com/~/all-channels")
+        time.sleep(random.uniform(8.23, 10.45))
+        
+        posts = driver.find_elements(By.XPATH, '//div[contains(@class, "relative cursor-pointer px-4 py-2 hover:bg-overlay-faint")]')
+
+        for post in posts:
+            actions.move_to_element(post).perform()
+            random_pause()
+            
+            if random.random() < 0.80:
+                like_post(post)
+            if random.random() < 0.6:
+                repost_post(driver, post)
+            if random.random() < 0.42:
+                comment_on_post(driver, post)
+            if random.random() < 0.75:
+                follow_post(post)
+            
+            mid_pause()
+        big_pause()
+        main()
+
+    except Exception as ex:
+        print(f"Общая ошибка: {ex}")
+    finally:
+        driver.close()
+        driver.quit()
+
+if __name__ == "__main__":
+    main()
