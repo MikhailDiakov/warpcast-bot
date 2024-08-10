@@ -25,7 +25,7 @@ def random_pause(min_time=2.77, max_time=5.23):
 def mid_pause(min_time=169, max_time=278):
     time.sleep(random.uniform(min_time, max_time))
 
-def big_pause(min_time=3526, max_time=4286):
+def big_pause(min_time=3226, max_time=4686):
     time.sleep(random.uniform(min_time, max_time))
 
 def like_post(post):
@@ -36,7 +36,7 @@ def like_post(post):
             like_button.click()
             fast_pause()
     except Exception as e:
-        print(f"Ошибка при попытке поставить лайк: {e}")
+        pass
 
 def repost_post(driver, post):
     try:
@@ -44,12 +44,13 @@ def repost_post(driver, post):
         if recast1:
             fast_pause()
             recast1.click()
-            random_pause()
+            fast_pause()
             recast2 = driver.find_element(By.XPATH, '//button[@class="flex w-full flex-row items-center justify-start p-2 align-middle text-sm outline-none hover:cursor-pointer hover:bg-overlay-faint text-default "]')
+            fast_pause()
             recast2.click()
             fast_pause()
     except Exception as e:
-        print(f"Ошибка при попытке сделать репост: {e}")
+        pass
 
 def comment_on_post(driver, post):
     try:
@@ -62,12 +63,12 @@ def comment_on_post(driver, post):
             fast_pause()
             driver.switch_to.active_element.send_keys(random_text)
             random_pause()
-            comment2 = driver.find_element(By.XPATH, './/button[@class="rounded-lg font-semibold border border-transparent bg-action-primary text-light active:border-action-primary-active disabled:bg-action-primary-disabled disabled:text-action-primary-disabled disabled:active:border-transparent px-[0.9333rem] py-[0.4333rem] text-sm" and @title="Reply"]')
+            comment2 = driver.find_element(By.XPATH,'.//button[@class="rounded-lg font-semibold border border-transparent bg-action-primary text-light active:border-action-primary-active disabled:bg-action-primary-disabled disabled:text-action-primary-disabled disabled:active:border-transparent px-[0.9333rem] py-[0.4333rem] text-sm" and @title="Reply"]')
             ActionChains(driver).move_to_element(comment2).perform()
             fast_pause()
             comment2.click()
     except Exception as e:
-        print(f"Ошибка при попытке оставить комментарий: {e}")
+        pass
 
 def follow_post(post):
     try:
@@ -76,7 +77,7 @@ def follow_post(post):
             fast_pause()
             follow.click()
     except Exception as ex:
-        print(f"Ошибка при попытке подписаться: {ex}")
+        pass
 
 driver = setup_browser()
 actions = ActionChains(driver)
@@ -90,20 +91,21 @@ def main():
         posts = driver.find_elements(By.XPATH, '//div[contains(@class, "relative cursor-pointer px-4 py-2 hover:bg-overlay-faint")]')
 
         for post in posts:
+            fast_pause()
             actions.move_to_element(post).perform()
             random_pause()
             
-            if random.random() < 0.80:
+            if random.random() < 0.8:
                 like_post(post)
             if random.random() < 0.6:
                 repost_post(driver, post)
-            if random.random() < 0.4:
+            if random.random() < 0.3:
                 comment_on_post(driver, post)
-            if random.random() < 0.75:
+            if random.random() < 1:
                 follow_post(post)
             
-            random_pause()
-        random_pause()
+            mid_pause()
+        big_pause()
         main()
 
     except Exception as ex:
