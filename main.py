@@ -41,11 +41,10 @@ def like_post(post):
 
 def repost_post(driver, post):
     try:
-        driver.execute_script(f"window.scrollBy(0, {random.randint(55, 105)});")
-        actions.move_by_offset(random.randint(150, 250),random.randint(5, 16)).perform()
-        fast_pause()
         recast1 = post.find_element(By.XPATH, './/div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-green text-faint"]')
         if recast1:
+            actions.move_to_element(recast1).perform()
+            driver.execute_script(f"window.scrollBy(0, {random.randint(25, 55)});")
             fast_pause()
             recast1.click()
             fast_pause()
@@ -62,6 +61,7 @@ def comment_on_post(driver, post):
         random_text = random.choice(random_ans)
         comment1 = post.find_element(By.XPATH,'.//div[@class="group flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-purple  text-faint"]')
         if comment1:
+            actions.move_to_element(comment1).perform()
             fast_pause()
             comment1.click()
             fast_pause()
@@ -105,7 +105,7 @@ def main():
                 like_post(post)
             if random.random() < 0.5:
                 repost_post(driver, post)
-            if random.random() < 0.4:
+            if random.random() < 0.3:
                 comment_on_post(driver, post)
             if random.random() < 1:
                 follow_post(post)
